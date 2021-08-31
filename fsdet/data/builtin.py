@@ -235,13 +235,13 @@ def register_all_pascal_voc(root="datasets"):
         for sid in range(1, 4):
             for shot in [1, 2, 3, 5, 10]:
                 for year in [2007, 2012]:
-                    for seed in range(100):
+                    for seed in range(20):
                         seed = "" if seed == 0 else "_seed{}".format(seed)
                         name = "voc_{}_trainval_{}{}_{}shot{}".format(
                             year, prefix, sid, shot, seed
                         )
                         dirname = "VOC{}".format(year)
-                        img_file = "{}_{}shot_split_{}_trainval".format(
+                        split = "{}_{}shot_split_{}_trainval".format(
                             prefix, shot, sid
                         )
                         keepclasses = (
@@ -249,12 +249,19 @@ def register_all_pascal_voc(root="datasets"):
                             if prefix == "all"
                             else "novel{}".format(sid)
                         )
+                        if name == "voc_2007_trainval_all1_1shot_seed1":
+                            print("test")
                         METASPLITS.append(
-                            (name, dirname, img_file, keepclasses, sid)
+                            (name, dirname, split, keepclasses, sid)
                         )
+
+    # manully add dataset in METASPLITS
+    # (name, dirname, img_file, keepclasses, sid) // sid should be 1-3
 
     for name, dirname, split, keepclasses, sid in METASPLITS:
         year = 2007 if "2007" in name else 2012
+        if name == "voc_2007_trainval_all1_1shot_seed1":
+            print("test")
         register_meta_pascal_voc(
             name,
             _get_builtin_metadata("pascal_voc_fewshot"),

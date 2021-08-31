@@ -107,9 +107,10 @@ class GeneralizedRCNN(nn.Module):
             ]
         else:
             gt_instances = None
-
+        # print("********** images len: ***********\n", len(images))
+        # print("********** images.tensor.shape: ***********\n", images.tensor.shape)
         features = self.backbone(images.tensor)
-
+        # print("********** features: ***********\n", features)
         if self.proposal_generator:
             proposals, proposal_losses = self.proposal_generator(
                 images, features, gt_instances
@@ -121,9 +122,12 @@ class GeneralizedRCNN(nn.Module):
             ]
             proposal_losses = {}
 
+        # print("********** roi_heads: ***********\n", self.roi_heads)
         _, detector_losses = self.roi_heads(
             images, features, proposals, gt_instances
         )
+        # print("********** detector_losses: ***********\n", detector_losses)
+        # print("********** proposal_losses: ***********\n", proposal_losses)
 
         losses = {}
         losses.update(detector_losses)
